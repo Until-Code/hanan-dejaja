@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Arabesque</title>
+  <title>Laisse moi t'embrasser</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -326,6 +326,7 @@
   <!-- SLIDE 1 : Are u mad at me -->
   <div class="slide is-active" id="s1">
     <p class="question-text">Are u mad at me?</p>
+    <p id="mad-msg" style="opacity:0; color: var(--color-primary); font-family: var(--font-body); font-weight: 800; font-size: 1.1rem; margin-bottom: 1.5rem; transition: opacity 0.3s ease; text-align: center;">Wallah Lahdim u cannot say that</p>
     <div class="feedback" id="fb-1"></div>
     <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:1rem;width:min(420px,90vw);position:relative;min-height:60px;overflow:visible;z-index:20;" id="mad-row">
       <button class="answer-btn" id="btn-yes" onclick="handleMad(this)">Yes</button>
@@ -357,25 +358,15 @@
 
   <!-- SLIDE 3 : Hug -->
   <div class="slide" id="s3">
-    <p class="question-text">Laisse moi te prendre dans mes bras</p>
+    <p class="question-text">Laisse moi t'embrasser</p>
     <div class="answers-row" style="flex-direction:column;gap:0.8rem;width:min(360px,88vw);">
       <button class="answer-btn" data-q="3" data-v="correct" style="width:100%;font-size:clamp(1.1rem,3vw,1.3rem);padding:1rem 1.4rem;">Yeah babe</button>
       <button class="answer-btn" data-q="3" data-v="correct" style="width:100%;font-size:clamp(1.1rem,3vw,1.3rem);padding:1rem 1.4rem;">YES MY LORD</button>
     </div>
   </div>
 
-  <!-- SLIDE 4 : Miss me -->
+  <!-- SLIDE 4 : Score -->
   <div class="slide" id="s4">
-    <p class="question-text">Be honest, u miss me, don't you ?</p>
-    <p id="miss-msg" style="opacity:0; color: var(--color-primary); font-family: var(--font-body); font-weight: 800; font-size: 1.1rem; margin-bottom: 1.5rem; transition: opacity 0.3s ease; text-align: center;">Wallah Lahdim u cannot say that</p>
-    <div class="answers-row" style="position:relative;">
-      <button class="answer-btn" id="btn-fuckoff" onclick="handleFuckOff(this)">fuck off</button>
-      <button class="answer-btn" id="btn-yeah" onclick="goTo(5)">yeah</button>
-    </div>
-  </div>
-
-  <!-- SLIDE 5 : Score -->
-  <div class="slide" id="s5">
     <p style="font-family:var(--font-display);font-size:clamp(1.4rem,4vw,2rem);color:var(--color-gold);text-align:center;letter-spacing:0.05em;">النتيجة — Résultat</p>
     <div class="score-ring">
       <span class="score-num" id="score-display">0</span>
@@ -456,17 +447,21 @@
   setInterval(rotateBottom, 3000);
 
   // ── Slides ──
-  const TOTAL = 6;
+  const TOTAL = 5;
   let current = 1;
   let isAnimating = false;
   const answered = {};
 
   // ── Mad at me logic ──
   let madClicks = 0;
-  let fuckOffInterval = null;
-    function handleMad(yesBtn) {
+    const madMsg = document.getElementById("mad-msg");
+    if (madMsg) madMsg.style.opacity = "0";
+  function handleMad(yesBtn) {
     madClicks++;
     const noBtn = document.getElementById("btn-no");
+    const madMsg = document.getElementById("mad-msg");
+    if (madMsg) madMsg.style.opacity = "1";
+
     const noSizes = [
       { fs: "3.2rem", pad: "1.6rem 3rem" },
       { fs: "4.5rem", pad: "2rem 4rem" },
@@ -501,30 +496,7 @@
     }
 }
 
-function handleFuckOff(btn) {
-    const msg = document.getElementById("miss-msg");
-    if (msg) msg.style.opacity = "1";
-
-    btn.disabled = true;
-    btn.style.pointerEvents = "none";
-    btn.style.position = "fixed";
-    btn.style.zIndex = "9999";
-    btn.style.transition = "all 0.25s ease-out";
-
-    const moveBtn = () => {
-      const maxX = window.innerWidth - btn.offsetWidth - 20;
-      const maxY = window.innerHeight - btn.offsetHeight - 20;
-      btn.style.left = Math.max(10, Math.random() * maxX) + "px";
-      btn.style.top = Math.max(10, Math.random() * maxY) + "px";
-    };
-
-    moveBtn();
-
-    if (fuckOffInterval) clearInterval(fuckOffInterval);
-    fuckOffInterval = setInterval(moveBtn, 280);
-  }
-
-  // ── Dejaja logic ──
+// ── Dejaja logic ──
   let dejajaPicked = { left: false, right: false };
   function pickDejaja(choice) {
     const leftImg = document.getElementById("dejaja-left-img");
@@ -636,23 +608,12 @@ function handleFuckOff(btn) {
     }
     document.getElementById("s1").classList.add("is-active");
     madClicks = 0;
+    const madMsg = document.getElementById("mad-msg");
+    if (madMsg) madMsg.style.opacity = "0";
     const yBtn = document.getElementById("btn-yes");
     const nBtn = document.getElementById("btn-no");
     if (yBtn) { yBtn.disabled=false; yBtn.style.opacity="1"; yBtn.style.fontSize=""; yBtn.style.padding=""; yBtn.style.pointerEvents=""; yBtn.style.transition=""; }
     if (nBtn) { nBtn.style.fontSize=""; nBtn.style.padding=""; nBtn.style.animation=""; nBtn.style.transition=""; }
-    const missMsg = document.getElementById("miss-msg");
-    if (missMsg) missMsg.style.opacity = "0";
-    if (fuckOffInterval) { clearInterval(fuckOffInterval); fuckOffInterval = null; }
-    const foBtn = document.getElementById("btn-fuckoff");
-    if (foBtn) {
-      foBtn.disabled = false;
-      foBtn.style.pointerEvents = "";
-      foBtn.style.position = "";
-      foBtn.style.left = "";
-      foBtn.style.top = "";
-      foBtn.style.zIndex = "";
-      foBtn.style.transition = "";
-    }
     // Reset dejaja
     dejajaPicked = { left: false, right: false };
     const dli = document.getElementById("dejaja-left-img");
