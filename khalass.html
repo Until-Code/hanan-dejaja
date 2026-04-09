@@ -129,27 +129,16 @@
       align-items: center; justify-content: center;
       padding: 4.5rem 1.5rem 3.5rem;
       visibility: hidden; pointer-events: none; z-index: 1;
-      background: var(--color-bg);
-}
-    .slide.is-active,
-.slide.enter-from-right,
-.slide.enter-from-left {
-  visibility: visible; pointer-events: all;
-  z-index: 3;
-}
+    }
+    .slide.is-active { visibility: visible; pointer-events: all; }
     .slide.enter-from-right { animation: enterRight 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
     .slide.enter-from-left  { animation: enterLeft  0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-    .slide.exit-to-left,
-.slide.exit-to-right {
-  visibility: visible; pointer-events: none;
-  z-index: 2;
-}
-.slide.exit-to-left     { animation: exitLeft   0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+    .slide.exit-to-left     { animation: exitLeft   0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
     .slide.exit-to-right    { animation: exitRight  0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-    @keyframes enterRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-    @keyframes enterLeft  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-    @keyframes exitLeft   { from { transform: translateX(0); } to { transform: translateX(-100%); } }
-    @keyframes exitRight  { from { transform: translateX(0); } to { transform: translateX(100%); } }
+    @keyframes enterRight { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+    @keyframes enterLeft  { from { transform: translateX(-100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+    @keyframes exitLeft   { from { transform: translateX(0); opacity:1; } to { transform: translateX(-100%); opacity:0; } }
+    @keyframes exitRight  { from { transform: translateX(0); opacity:1; } to { transform: translateX(100%); opacity:0; } }
 
     /* ── Photo ── */
     .photo-card {
@@ -456,42 +445,46 @@
   function handleMad(yesBtn) {
     madClicks++;
     const noBtn = document.getElementById("btn-no");
-
-    const noSizes = [
-      { fs: "3.2rem", pad: "1.6rem 3rem" },
-      { fs: "4.5rem", pad: "2rem 4rem" },
-      { fs: "6rem",   pad: "2.5rem 5rem" },
-      { fs: "8rem",   pad: "3.5rem 6.5rem" },
-      { fs: "10rem",  pad: "4.5rem 8rem" }
+    const madRow = document.getElementById("mad-row");
+    // No grows progressively over 8 clicks
+    const noSteps = [
+      { fs: "1.2rem",  pad: "0.8rem 1.3rem" },
+      { fs: "1.5rem",  pad: "1rem 1.6rem" },
+      { fs: "2rem",    pad: "1.2rem 2rem" },
+      { fs: "2.6rem",  pad: "1.4rem 2.5rem" },
+      { fs: "3.2rem",  pad: "1.6rem 3rem" },
+      { fs: "3.8rem",  pad: "1.8rem 3.5rem" },
+      { fs: "4.5rem",  pad: "2rem 4rem" },
+      { fs: "5.5rem",  pad: "2.2rem 4.5rem" },
     ];
-
-    const yesSizes = [
-      { fs: "0.55rem", pad: "0.35rem 0.45rem", op: "0.5" },
-      { fs: "0.45rem", pad: "0.25rem 0.35rem", op: "0.3" },
-      { fs: "0.3rem",  pad: "0.15rem 0.2rem",  op: "0.1" },
-      { fs: "0px",     pad: "0px",             op: "0" },
-      { fs: "0px",     pad: "0px",             op: "0" }
+    // Yes shrinks but stays clickable until step 8
+    const yesSteps = [
+      { fs: "0.85rem", pad: "0.55rem 0.7rem", op: 0.9 },
+      { fs: "0.78rem", pad: "0.5rem 0.6rem",  op: 0.8 },
+      { fs: "0.7rem",  pad: "0.45rem 0.55rem", op: 0.7 },
+      { fs: "0.62rem", pad: "0.4rem 0.5rem",  op: 0.55 },
+      { fs: "0.55rem", pad: "0.35rem 0.45rem", op: 0.4 },
+      { fs: "0.48rem", pad: "0.3rem 0.4rem",  op: 0.28 },
+      { fs: "0.4rem",  pad: "0.25rem 0.35rem", op: 0.15 },
+      { fs: "0.3rem",  pad: "0.2rem 0.25rem", op: 0.05 },
     ];
-
-    const idx = Math.min(madClicks - 1, noSizes.length - 1);
-
-    noBtn.style.transition = "all 0.15s ease-out";
-    noBtn.style.fontSize = noSizes[idx].fs;
-    noBtn.style.padding = noSizes[idx].pad;
-
-    yesBtn.style.transition = "all 0.15s ease-out";
-    yesBtn.style.fontSize = yesSizes[idx].fs;
-    yesBtn.style.padding = yesSizes[idx].pad;
-    yesBtn.style.opacity = yesSizes[idx].op;
-
-    if (yesSizes[idx].op === "0") {
+    const idx = Math.min(madClicks - 1, noSteps.length - 1);
+    noBtn.style.fontSize = noSteps[idx].fs;
+    noBtn.style.padding = noSteps[idx].pad;
+    noBtn.style.transition = "font-size 0.35s cubic-bezier(0.16,1,0.3,1), padding 0.35s cubic-bezier(0.16,1,0.3,1)";
+    yesBtn.style.fontSize = yesSteps[idx].fs;
+    yesBtn.style.padding = yesSteps[idx].pad;
+    yesBtn.style.opacity = yesSteps[idx].op;
+    yesBtn.style.transition = "font-size 0.3s ease, padding 0.3s ease, opacity 0.3s ease";
+    // Only at the very end: disable Yes, pulse No
+    if (madClicks >= noSteps.length) {
       yesBtn.disabled = true;
       yesBtn.style.pointerEvents = "none";
       noBtn.style.animation = "pulse 0.5s ease 3";
     }
-}
+  }
 
-// ── Dejaja logic ──
+  // ── Dejaja logic ──
   let dejajaPicked = { left: false, right: false };
   function pickDejaja(choice) {
     const leftImg = document.getElementById("dejaja-left-img");
@@ -627,7 +620,7 @@
     const dn = document.getElementById("dejaja-next");
     if (dn) { dn.style.display = "none"; }
     isAnimating = false;
-    current = 0;
+    current = 1;
   }
 </script>
 </body>
