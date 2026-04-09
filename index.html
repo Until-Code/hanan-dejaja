@@ -289,6 +289,22 @@
       transition: all 0.25s ease; margin-top: 1.4rem;
     }
     .restart-btn:hover { background: var(--color-primary); color: #fff; transform: translateY(-2px); }
+  
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes panicMove {
+      0%   { transform: translate(0px, 0px) rotate(0deg); }
+      10%  { transform: translate(25px, -15px) rotate(5deg); }
+      20%  { transform: translate(-25px, 15px) rotate(-5deg); }
+      30%  { transform: translate(15px, 30px) rotate(10deg); }
+      40%  { transform: translate(-15px, -30px) rotate(-10deg); }
+      50%  { transform: translate(30px, 10px) rotate(5deg); }
+      60%  { transform: translate(-30px, -15px) rotate(-5deg); }
+      70%  { transform: translate(20px, 25px) rotate(10deg); }
+      80%  { transform: translate(-25px, -10px) rotate(-10deg); }
+      90%  { transform: translate(10px, -25px) rotate(5deg); }
+      100% { transform: translate(0px, 0px) rotate(0deg); }
+    }
   </style>
 </head>
 <body>
@@ -370,12 +386,18 @@
     <p id="miss-msg" style="opacity:0; color: var(--color-primary); font-family: var(--font-body); font-weight: 800; font-size: 1.1rem; margin-bottom: 1.5rem; transition: opacity 0.3s ease; text-align: center;">Wallah Lahdim u cannot say that</p>
     <div class="answers-row" style="position:relative;">
       <button class="answer-btn" id="btn-fuckoff" onclick="handleFuckOff(this)">fuck off</button>
-      <button class="answer-btn" id="btn-yeah" onclick="goTo(5)">yeah</button>
+      <button class="answer-btn" id="btn-yeah" onclick="handleYeah()">yeah</button>
     </div>
   </div>
 
-  <!-- SLIDE 5 : Score -->
+  <!-- SLIDE 5 : Loading -->
   <div class="slide" id="s5">
+    <div style="width:60px;height:60px;border:5px solid var(--color-gold-light);border-top:5px solid var(--color-primary);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:2rem;"></div>
+    <p class="question-text" style="animation:pulse 1.5s ease-in-out infinite; font-size:1.6rem; color:var(--color-primary);">Attends, je charge la vibe...</p>
+  </div>
+
+  <!-- SLIDE 6 : Score -->
+  <div class="slide" id="s6">
     <p style="font-family:var(--font-display);font-size:clamp(1.4rem,4vw,2rem);color:var(--color-gold);text-align:center;letter-spacing:0.05em;">النتيجة — Résultat</p>
     <div class="score-ring">
       <span class="score-num" id="score-display">0</span>
@@ -456,7 +478,7 @@
   setInterval(rotateBottom, 3000);
 
   // ── Slides ──
-  const TOTAL = 6;
+  const TOTAL = 7;
   let current = 1;
   let isAnimating = false;
   const answered = {};
@@ -501,7 +523,15 @@
     }
 }
 
-function handleFuckOff(btn) {
+function handleYeah() {
+    goTo(5);
+    setTimeout(() => {
+      goTo(6);
+      renderScore();
+    }, 5000);
+  }
+
+  function handleFuckOff(btn) {
     const msg = document.getElementById("miss-msg");
     if (msg) msg.style.opacity = "1";
 
