@@ -314,10 +314,6 @@
 
   <!-- SLIDE 1 : Are u mad at me -->
   <div class="slide is-active" id="s1">
-    <div class="photo-card">
-      <img src="https://pplx-res.cloudinary.com/image/upload/pplx_search_images/4c0f2eb5e8050533b5d0b0be33be5e43fa045651.jpg"
-           alt="Motif géométrique arabe étoile colorée" width="320" height="320" loading="lazy">
-    </div>
     <p class="question-text">Are u mad at me?</p>
     <div class="feedback" id="fb-1"></div>
     <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:1rem;width:min(420px,90vw);position:relative;min-height:60px;overflow:visible;z-index:20;" id="mad-row">
@@ -329,11 +325,11 @@
   <!-- SLIDE 2 : Dejaja -->
   <div class="slide" id="s2">
     <p class="question-text">Which arms do u want?</p>
-    <div id="dejaja-display" style="display:flex;gap:1rem;justify-content:center;align-items:center;margin-bottom:1rem;min-height:200px;">
-      <div id="dejaja-left-img" style="opacity:0;transform:scale(0.7);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);width:min(180px,42vw);aspect-ratio:1;border-radius:20px;overflow:hidden;border:3px solid var(--color-gold);box-shadow:var(--shadow-lg);">
+    <div id="dejaja-display" style="display:flex;gap:1rem;justify-content:center;align-items:center;margin-bottom:1rem;min-height:220px;">
+      <div id="dejaja-left-img" style="opacity:0;transform:scale(0.7);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);width:min(220px,44vw);aspect-ratio:1;border-radius:20px;overflow:hidden;border:3px solid var(--color-gold);box-shadow:var(--shadow-lg);">
         <img src="left.JPG" alt="Dejaja left" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
-      <div id="dejaja-right-img" style="opacity:0;transform:scale(0.7);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);width:min(180px,42vw);aspect-ratio:1;border-radius:20px;overflow:hidden;border:3px solid var(--color-gold);box-shadow:var(--shadow-lg);">
+      <div id="dejaja-right-img" style="opacity:0;transform:scale(0.7);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);width:min(220px,44vw);aspect-ratio:1;border-radius:20px;overflow:hidden;border:3px solid var(--color-gold);box-shadow:var(--shadow-lg);">
         <img src="right.JPG" alt="Dejaja right" style="width:100%;height:100%;object-fit:cover;display:block;">
       </div>
     </div>
@@ -348,44 +344,28 @@
     <button class="answer-btn" id="dejaja-next" onclick="goTo(3)" style="display:none;margin-top:0.8rem;border-color:var(--color-primary);color:var(--color-primary);flex:none;font-size:clamp(1.1rem,3vw,1.3rem);padding:1rem 2.4rem;">Khalass arms</button>
   </div>
 
-  <!-- SLIDE 3 -->
+  <!-- SLIDE 3 : Hug -->
   <div class="slide" id="s3">
-    <div class="photo-card">
-      <img src="https://pplx-res.cloudinary.com/image/upload/pplx_search_images/45c17538f9cf188debd4f40b6bd85831ed2a9386.jpg"
-           alt="Zellige mosaïque marocaine colorée" width="320" height="320" loading="lazy">
-    </div>
-    <p class="question-text">Dans quelle ville marocaine l'art des zellige est-il le plus célèbre ?</p>
-    <div class="feedback" id="fb-3"></div>
-    <div class="answers-row">
-      <button class="answer-btn" data-q="3" data-v="wrong">Marrakech</button>
-      <button class="answer-btn" data-q="3" data-v="correct">Fès</button>
+    <p class="question-text">Laisse moi te prendre dans mes bras</p>
+    <div class="answers-row" style="flex-direction:column;gap:0.8rem;width:min(360px,88vw);">
+      <button class="answer-btn" data-q="3" data-v="correct" style="width:100%;font-size:clamp(1.1rem,3vw,1.3rem);padding:1rem 1.4rem;">Yeah babe</button>
+      <button class="answer-btn" data-q="3" data-v="correct" style="width:100%;font-size:clamp(1.1rem,3vw,1.3rem);padding:1rem 1.4rem;">YES MY LORD</button>
     </div>
   </div>
 
-  <!-- SLIDE 4 -->
+  <!-- SLIDE 4 : Score -->
   <div class="slide" id="s4">
-    <div class="photo-card">
-      <img src="https://pplx-res.cloudinary.com/image/upload/pplx_search_images/45c17538f9cf188debd4f40b6bd85831ed2a9386.jpg"
-           alt="Calligraphie arabe ornementée" width="320" height="320" loading="lazy">
-    </div>
-    <p class="question-text">Quel style de calligraphie arabe est connu pour ses courbes élégantes et ses enjolivures ?</p>
-    <div class="feedback" id="fb-4"></div>
-    <div class="answers-row">
-      <button class="answer-btn" data-q="4" data-v="correct">Diwani</button>
-      <button class="answer-btn" data-q="4" data-v="wrong">Kufi</button>
-    </div>
-  </div>
-
-  <!-- SLIDE 5 : Score -->
-  <div class="slide" id="s5">
     <p style="font-family:var(--font-display);font-size:clamp(1.4rem,4vw,2rem);color:var(--color-gold);text-align:center;letter-spacing:0.05em;">النتيجة — Résultat</p>
     <div class="score-ring">
       <span class="score-num" id="score-display">0</span>
       <span class="score-sublabel">/ 10</span>
     </div>
     <p class="score-msg" id="score-msg"></p>
+    <div class="photo-card" style="margin-top:1.2rem;">
+      <img src="https://pplx-res.cloudinary.com/image/upload/pplx_search_images/4c0f2eb5e8050533b5d0b0be33be5e43fa045651.jpg"
+           alt="Photo souvenir" width="380" height="380" loading="lazy">
+    </div>
     <p class="ornament">مَا شَاءَ ٱللَّٰهُ</p>
-    <p class="ornament" style="margin-top:1rem">﷽</p>
   </div>
 
 </div>
@@ -455,7 +435,7 @@
   setInterval(rotateBottom, 3000);
 
   // ── Slides ──
-  const TOTAL = 6;
+  const TOTAL = 5;
   let current = 1;
   let isAnimating = false;
   const answered = {};
