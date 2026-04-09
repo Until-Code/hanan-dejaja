@@ -8,22 +8,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-        :root {
-      --color-bg: #150525; /* Violet sombre premium */
-      --color-text: #F8F2FF; /* Texte blanc/lilas clair */
-      --color-text-muted: #B399D4; /* Lavande doux */
-      --color-primary: #E6B95C; /* Or lumineux (remplace l'ancien rouge/primaire) */
-      --color-gold: #A57D33; /* Or plus sombre pour les bordures inactives */
-      --color-gold-light: #2A104A; /* Violet intermédiaire pour le fond des cards */
+    :root {
+      --color-bg: #fdf6e3;
+      --color-text: #2c1a00;
+      --color-text-muted: #7a5c28;
+      --color-primary: #c0392b;
+      --color-gold: #d4a84b;
+      --color-gold-light: #f5e6b8;
       --font-display: "Scheherazade New", serif;
       --font-body: "Nunito", sans-serif;
-      --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+      --shadow-lg: 0 16px 48px rgba(44,26,0,0.18);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-font-smoothing: antialiased; }
     body {
       font-family: var(--font-body);
-      background: var(--color-bg);
+      background: #ffffff;
       color: var(--color-text);
       height: 100dvh;
       overflow: hidden;
@@ -32,8 +32,8 @@
       content: "";
       position: fixed; inset: 0;
       background-image:
-        radial-gradient(circle at 20% 25%, rgba(230,185,92,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 75%, rgba(179,153,212,0.12) 0%, transparent 50%);
+        radial-gradient(circle at 20% 25%, rgba(212,168,75,0.13) 0%, transparent 50%),
+        radial-gradient(circle at 80% 75%, rgba(192,57,43,0.10) 0%, transparent 50%);
       pointer-events: none; z-index: 0;
     }
 
@@ -228,7 +228,7 @@
     }
     .answer-btn:active:not(:disabled) { transform: translateY(-1px); }
     .answer-btn.correct { border-color: #00897b; color: #00897b; }
-    .answer-btn.wrong   { border-color: #E74C3C; color: #E74C3C; opacity: 0.6; }
+    .answer-btn.wrong   { border-color: var(--color-primary); color: var(--color-primary); opacity: 0.6; }
     .answer-btn:disabled { cursor: default; }
 
     /* ── Intro ── */
@@ -314,8 +314,8 @@
   <!-- SLIDE 0 : Intro -->
   <div class="slide" id="s0">
     <svg width="70" height="70" viewBox="0 0 80 80" fill="none" style="margin-bottom:1rem;opacity:0.8">
-      <polygon points="40,4 47,28 72,28 52,44 60,70 40,55 20,70 28,44 8,28 33,28" fill="#E6B95C" opacity="0.75"/>
-      <polygon points="40,16 45,32 62,32 49,42 54,58 40,49 26,58 31,42 18,32 35,32" fill="#A57D33" opacity="0.5"/>
+      <polygon points="40,4 47,28 72,28 52,44 60,70 40,55 20,70 28,44 8,28 33,28" fill="#d4a84b" opacity="0.75"/>
+      <polygon points="40,16 45,32 62,32 49,42 54,58 40,49 26,58 31,42 18,32 35,32" fill="#c0392b" opacity="0.5"/>
     </svg>
     <h1 class="intro-title">قرآن وثقافة<br><span style="font-size:0.52em;color:var(--color-gold)">Ma hanan</span></h1>
     <p class="intro-sub">4 questions sur la culture arabe et l'art islamique. Prêt(e) ?</p>
@@ -627,7 +627,7 @@
     const dn = document.getElementById("dejaja-next");
     if (dn) { dn.style.display = "none"; }
     isAnimating = false;
-    current = 1;
+    current = 0;
   }
 </script>
 </body>
