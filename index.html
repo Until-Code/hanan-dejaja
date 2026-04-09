@@ -65,24 +65,18 @@
     .rotating-text span {
       position: absolute;
       left: 50%;
-      transform: translateX(-50%);
       white-space: nowrap;
       opacity: 0;
-      animation: none;
+      transform: translateX(-50%) translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .rotating-text span.current {
-      animation: slideIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    .rotating-text span.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
-    .rotating-text span.leaving {
-      animation: slideOut 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
-    }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(24px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-    @keyframes slideOut {
-      from { opacity: 1; transform: translateX(-50%) translateY(0); }
-      to   { opacity: 0; transform: translateX(-50%) translateY(-24px); }
+    .rotating-text span.exit-up {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-16px);
     }
 
     /* ── Bottom banner ── */
@@ -113,15 +107,18 @@
     .rotating-text-bottom span {
       position: absolute;
       left: 50%;
-      transform: translateX(-50%);
       white-space: nowrap;
       opacity: 0;
+      transform: translateX(-50%) translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-    .rotating-text-bottom span.current {
-      animation: slideIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    .rotating-text-bottom span.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
-    .rotating-text-bottom span.leaving {
-      animation: slideOut 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    .rotating-text-bottom span.exit-up {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-16px);
     }
 
     /* ── Slides ── */
@@ -202,9 +199,9 @@
       background: none;
       border: 2.5px solid var(--color-gold);
       border-radius: 999px;
-      padding: 0.65rem 0.8rem;
+      padding: 0.9rem 1.4rem;
       font-family: var(--font-body);
-      font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
       font-weight: 700;
       color: var(--color-text);
       cursor: pointer;
@@ -240,8 +237,8 @@
       background: none;
       border: 2.5px solid var(--color-gold);
       border-radius: 999px;
-      padding: 0.85rem 2.4rem; color: var(--color-text);
-      font-family: var(--font-body); font-size: 1rem; font-weight: 800;
+      padding: 1rem 2.8rem; color: var(--color-text);
+      font-family: var(--font-body); font-size: 1.1rem; font-weight: 800;
       cursor: pointer;
       transition: all 0.25s ease;
     }
@@ -337,12 +334,14 @@
       </div>
     </div>
     <p id="dejaja-msg" style="font-size:clamp(0.95rem,2.2vw,1.1rem);font-weight:800;color:var(--color-primary);text-align:center;margin-bottom:0.8rem;opacity:0;transition:opacity 0.4s ease;">Excellent gourmet choice</p>
-    <div class="answers-row" id="dejaja-row">
-      <button class="answer-btn" id="dejaja-btn-left" onclick="pickDejaja('left')">🫲 Dejaja left</button>
-      <button class="answer-btn" id="dejaja-btn-both" onclick="pickDejaja('both')" style="display:none;">🍗 Both 🍗</button>
-      <button class="answer-btn" id="dejaja-btn-right" onclick="pickDejaja('right')">🫱 Dejaja right</button>
+    <div class="answers-row" id="dejaja-row" style="flex-direction:column;gap:0.7rem;width:min(320px,80vw);">
+      <div style="display:flex;gap:0.8rem;width:100%;">
+        <button class="answer-btn" id="dejaja-btn-left" onclick="pickDejaja('left')" style="flex:1;font-size:clamp(0.95rem,2.2vw,1.1rem);padding:0.85rem 1rem;">🫲 Dejaja left</button>
+        <button class="answer-btn" id="dejaja-btn-right" onclick="pickDejaja('right')" style="flex:1;font-size:clamp(0.95rem,2.2vw,1.1rem);padding:0.85rem 1rem;">🫱 Dejaja right</button>
+      </div>
+      <button class="answer-btn" id="dejaja-btn-both" onclick="pickDejaja('both')" style="display:none;font-size:clamp(1rem,2.5vw,1.2rem);padding:0.9rem 1.2rem;width:100%;">🍗 Both 🍗</button>
     </div>
-    <button class="answer-btn" id="dejaja-next" onclick="goTo(3)" style="display:none;margin-top:1rem;border-color:var(--color-primary);color:var(--color-primary);flex:none;">Khalass arms</button>
+    <button class="answer-btn" id="dejaja-next" onclick="goTo(3)" style="display:none;margin-top:0.8rem;border-color:var(--color-primary);color:var(--color-primary);flex:none;font-size:clamp(0.95rem,2.2vw,1.1rem);padding:0.85rem 2rem;">Khalass arms</button>
   </div>
 
   <!-- SLIDE 3 -->
@@ -388,7 +387,7 @@
 </div>
 
 <script>
-  // ── Rotating text ──
+  // ── Rotating text (top) ──
   const phrases = [
     "Respecte la signification de ton prénom",
     "Respect your name meaning",
@@ -396,40 +395,32 @@
     "Уважай значение своего имени"
   ];
   let phraseIndex = 0;
-  const currentEl = document.getElementById("rt-current");
-  const nextEl    = document.getElementById("rt-next");
+  const rtA = document.getElementById("rt-current");
+  const rtB = document.getElementById("rt-next");
+  let rtUseA = true;
 
-  currentEl.textContent = phrases[0];
+  rtA.textContent = phrases[0];
+  rtA.classList.add("visible");
 
   function rotateBanner() {
     const nextIndex = (phraseIndex + 1) % phrases.length;
-    nextEl.textContent = phrases[nextIndex];
-    nextEl.style.opacity = "0";
-    nextEl.style.transform = "translateX(-50%) translateY(24px)";
-    nextEl.style.transition = "none";
-
-    // Animate out current
-    currentEl.classList.remove("current");
-    currentEl.classList.add("leaving");
-
-    // Animate in next
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      nextEl.classList.add("current");
-    }));
-
-    setTimeout(() => {
-      currentEl.classList.remove("leaving");
-      currentEl.textContent = phrases[nextIndex];
-      currentEl.classList.add("current");
-      nextEl.classList.remove("current");
-      nextEl.textContent = "";
-      phraseIndex = nextIndex;
-    }, 550);
+    const outEl = rtUseA ? rtA : rtB;
+    const inEl  = rtUseA ? rtB : rtA;
+    // Prepare incoming below
+    inEl.classList.remove("visible", "exit-up");
+    inEl.textContent = phrases[nextIndex];
+    // Force reflow
+    void inEl.offsetWidth;
+    // Animate out current, animate in next
+    outEl.classList.remove("visible");
+    outEl.classList.add("exit-up");
+    inEl.classList.add("visible");
+    rtUseA = !rtUseA;
+    phraseIndex = nextIndex;
   }
+  setInterval(rotateBanner, 3000);
 
-  setInterval(rotateBanner, 2800);
-
-  // ── Bottom rotating text ──
+  // ── Rotating text (bottom) ──
   const bottomPhrases = [
     "I miss you",
     "Tu me manques",
@@ -437,28 +428,27 @@
     "Я скучаю по тебе"
   ];
   let bottomIndex = 0;
-  const rbCurrent = document.getElementById("rb-current");
-  const rbNext    = document.getElementById("rb-next");
-  rbCurrent.textContent = bottomPhrases[0];
+  const rbA = document.getElementById("rb-current");
+  const rbB = document.getElementById("rb-next");
+  let rbUseA = true;
+
+  rbA.textContent = bottomPhrases[0];
+  rbA.classList.add("visible");
 
   function rotateBottom() {
     const nextIndex = (bottomIndex + 1) % bottomPhrases.length;
-    rbNext.textContent = bottomPhrases[nextIndex];
-    rbCurrent.classList.remove("current");
-    rbCurrent.classList.add("leaving");
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      rbNext.classList.add("current");
-    }));
-    setTimeout(() => {
-      rbCurrent.classList.remove("leaving");
-      rbCurrent.textContent = bottomPhrases[nextIndex];
-      rbCurrent.classList.add("current");
-      rbNext.classList.remove("current");
-      rbNext.textContent = "";
-      bottomIndex = nextIndex;
-    }, 550);
+    const outEl = rbUseA ? rbA : rbB;
+    const inEl  = rbUseA ? rbB : rbA;
+    inEl.classList.remove("visible", "exit-up");
+    inEl.textContent = bottomPhrases[nextIndex];
+    void inEl.offsetWidth;
+    outEl.classList.remove("visible");
+    outEl.classList.add("exit-up");
+    inEl.classList.add("visible");
+    rbUseA = !rbUseA;
+    bottomIndex = nextIndex;
   }
-  setInterval(rotateBottom, 2800);
+  setInterval(rotateBottom, 3000);
 
   // ── Slides ──
   const TOTAL = 6;
@@ -474,14 +464,14 @@
     const madRow = document.getElementById("mad-row");
     // No grows progressively over 8 clicks
     const noSteps = [
-      { fs: "1rem",   pad: "0.7rem 1rem" },
-      { fs: "1.15rem", pad: "0.8rem 1.2rem" },
-      { fs: "1.35rem", pad: "0.9rem 1.5rem" },
-      { fs: "1.6rem",  pad: "1rem 1.8rem" },
-      { fs: "1.9rem",  pad: "1.1rem 2rem" },
-      { fs: "2.2rem",  pad: "1.3rem 2.3rem" },
-      { fs: "2.6rem",  pad: "1.5rem 2.6rem" },
-      { fs: "3rem",    pad: "1.7rem 3rem" },
+      { fs: "1.2rem",  pad: "0.8rem 1.3rem" },
+      { fs: "1.5rem",  pad: "1rem 1.6rem" },
+      { fs: "2rem",    pad: "1.2rem 2rem" },
+      { fs: "2.6rem",  pad: "1.4rem 2.5rem" },
+      { fs: "3.2rem",  pad: "1.6rem 3rem" },
+      { fs: "3.8rem",  pad: "1.8rem 3.5rem" },
+      { fs: "4.5rem",  pad: "2rem 4rem" },
+      { fs: "5.5rem",  pad: "2.2rem 4.5rem" },
     ];
     // Yes shrinks but stays clickable until step 8
     const yesSteps = [
@@ -547,12 +537,13 @@
       bothBtn.style.display = "";
     }
 
-    // Once both are picked → show message + khalass button
+    // Once both are picked → show message + khalass button, hide others
     if (dejajaPicked.left && dejajaPicked.right) {
       msg.style.opacity = "1";
-      btnLeft.disabled = true;
-      btnRight.disabled = true;
-      bothBtn.disabled = true;
+      btnLeft.style.display = "none";
+      btnRight.style.display = "none";
+      bothBtn.style.display = "none";
+      document.getElementById("dejaja-row").style.display = "none";
       answered["2"] = "correct";
       const nextBtn = document.getElementById("dejaja-next");
       nextBtn.style.display = "";
@@ -635,6 +626,13 @@
     if (dri) { dri.style.opacity = "0"; dri.style.transform = "scale(0.7)"; }
     if (dm) { dm.style.opacity = "0"; }
     if (db) { db.style.display = "none"; }
+    const dl = document.getElementById("dejaja-btn-left");
+    const dr = document.getElementById("dejaja-btn-right");
+    const drow = document.getElementById("dejaja-row");
+    if (dl) { dl.style.display = ""; dl.disabled = false; dl.classList.remove("correct"); }
+    if (dr) { dr.style.display = ""; dr.disabled = false; dr.classList.remove("correct"); }
+    if (db) { db.disabled = false; db.classList.remove("correct"); }
+    if (drow) { drow.style.display = ""; }
     const dn = document.getElementById("dejaja-next");
     if (dn) { dn.style.display = "none"; }
     isAnimating = false;
