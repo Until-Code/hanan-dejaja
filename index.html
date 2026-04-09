@@ -8,16 +8,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-        :root {
-      --color-bg: #150525; /* Violet sombre premium */
-      --color-text: #F8F2FF; /* Texte blanc/lilas clair */
-      --color-text-muted: #B399D4; /* Lavande doux */
-      --color-primary: #E6B95C; /* Or lumineux (remplace l'ancien rouge/primaire) */
-      --color-gold: #A57D33; /* Or plus sombre pour les bordures inactives */
-      --color-gold-light: #2A104A; /* Violet intermédiaire pour le fond des cards */
+            :root {
+      --color-bg: #ffffff; /* Fond blanc pur */
+      --color-text: #2c1a00; /* Texte foncé pour lisibilité */
+      --color-text-muted: #7a5c28; /* Marron doux */
+      --color-primary: #c0392b; /* Rouge/Bordeaux premium */
+      --color-gold: #d4a84b; /* Or standard */
+      --color-gold-light: #fdf6e3; /* Crème clair pour les cards */
       --font-display: "Scheherazade New", serif;
       --font-body: "Nunito", sans-serif;
-      --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+      --shadow-lg: 0 16px 48px rgba(44,26,0,0.18);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-font-smoothing: antialiased; }
@@ -32,8 +32,8 @@
       content: "";
       position: fixed; inset: 0;
       background-image:
-        radial-gradient(circle at 20% 25%, rgba(230,185,92,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 75%, rgba(179,153,212,0.12) 0%, transparent 50%);
+        radial-gradient(circle at 20% 25%, rgba(212,168,75,0.13) 0%, transparent 50%),
+        radial-gradient(circle at 80% 75%, rgba(192,57,43,0.10) 0%, transparent 50%);
       pointer-events: none; z-index: 0;
     }
 
@@ -174,7 +174,7 @@
 
     /* ── Question text ── */
     .question-text {
-      font-size: clamp(1rem, 2.5vw, 1.12rem);
+      font-size: clamp(1.2rem, 3vw, 1.4rem);
       font-weight: 800;
       color: var(--color-text);
       text-align: center;
@@ -326,6 +326,7 @@
   <!-- SLIDE 1 : Are u mad at me -->
   <div class="slide is-active" id="s1">
     <p class="question-text">Are u mad at me?</p>
+    <p id="mad-msg" style="opacity:0; color: var(--color-primary); font-family: var(--font-body); font-weight: 800; font-size: 1.1rem; margin-bottom: 1.5rem; transition: opacity 0.3s ease; text-align: center;">Wallah Lahdim u cannot say that</p>
     <div class="feedback" id="fb-1"></div>
     <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;gap:1rem;width:min(420px,90vw);position:relative;min-height:60px;overflow:visible;z-index:20;" id="mad-row">
       <button class="answer-btn" id="btn-yes" onclick="handleMad(this)">Yes</button>
@@ -453,9 +454,13 @@
 
   // ── Mad at me logic ──
   let madClicks = 0;
+    const madMsg = document.getElementById("mad-msg");
+    if (madMsg) madMsg.style.opacity = "0";
   function handleMad(yesBtn) {
     madClicks++;
     const noBtn = document.getElementById("btn-no");
+    const madMsg = document.getElementById("mad-msg");
+    if (madMsg) madMsg.style.opacity = "1";
 
     const noSizes = [
       { fs: "3.2rem", pad: "1.6rem 3rem" },
@@ -603,6 +608,8 @@
     }
     document.getElementById("s1").classList.add("is-active");
     madClicks = 0;
+    const madMsg = document.getElementById("mad-msg");
+    if (madMsg) madMsg.style.opacity = "0";
     const yBtn = document.getElementById("btn-yes");
     const nBtn = document.getElementById("btn-no");
     if (yBtn) { yBtn.disabled=false; yBtn.style.opacity="1"; yBtn.style.fontSize=""; yBtn.style.padding=""; yBtn.style.pointerEvents=""; yBtn.style.transition=""; }
